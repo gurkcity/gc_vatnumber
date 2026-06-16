@@ -20,7 +20,6 @@ namespace Onlineshopmodule\PrestaShop\Module\Vatnumber;
 use Address;
 use Country;
 use Validate;
-use Zone;
 
 class B2BIdentifier
 {
@@ -29,17 +28,17 @@ class B2BIdentifier
     const TYPE_TAX_EXCL = 2;
 
     private $address = null;
-    private $zone_1 = null;
-    private $zone_2 = null;
+    private $zones_1 = null;
+    private $zones_2 = null;
 
     public function __construct(
         Address $address,
-        Zone $zone_1,
-        Zone $zone_2
+        array $zones_1,
+        array $zones_2
     ) {
         $this->address = $address;
-        $this->zone_1 = $zone_1;
-        $this->zone_2 = $zone_2;
+        $this->zones_1 = $zones_1;
+        $this->zones_2 = $zones_2;
     }
 
     public function getB2BType(): int
@@ -68,7 +67,7 @@ class B2BIdentifier
             return false;
         }
 
-        return (int)$country->id_zone === (int)$this->zone_1->id;
+        return in_array($country->id_zone, $this->zones_1);
     }
 
     private function isInZone2(): bool
@@ -79,7 +78,7 @@ class B2BIdentifier
             return false;
         }
 
-        return (int)$country->id_zone === (int)$this->zone_2->id;
+        return in_array($country->id_zone, $this->zones_2);
     }
 
     private function isInZone3(): bool

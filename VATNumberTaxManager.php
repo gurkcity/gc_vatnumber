@@ -52,30 +52,32 @@ class VATNumberTaxManager implements TaxManagerInterface
 		if it does not contain NULL in some of the other fields.
 		*/
 
-		static $cached_address = NULL;
+		static $cached_address = null;
 
 		if (!Validate::isLoadedObject($address)) {
 			return false;
 		}
 
-		if (!Configuration::get('VATNUMBER_MANAGEMENT')) {
-			return false;
+		if ($address->id_customer) {
+			$cached_address = $address;
 		}
 
-		if ($address->id_customer != NULL) {
-			$cached_address = $address;
+		if ($cached_address === null) {
+			return false;
 		}
 
 		try {
 			$b2b_identifier = (new B2BIdentifierFactory(
-				(int)Configuration::get('VATNUMBER_ZONE_1'),
-				(int)Configuration::get('VATNUMBER_ZONE_2')
+				json_decode(Configuration::get('VATNUMBER_ZONE_1'), true),
+				json_decode(Configuration::get('VATNUMBER_ZONE_2'), true)
 			))->getB2BIdentifierForAddress($cached_address);
+
+			return $b2b_identifier->getB2BType() === B2BIdentifier::TYPE_TAX_EXCL;
 		} catch (B2BIdentifierException $e) {
-			return false;
+
 		}
 
-		return $b2b_identifier->getB2BType() === B2BIdentifier::TYPE_TAX_EXCL;
+		return false;
 	}
 
 	public function getTaxCalculator()

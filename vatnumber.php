@@ -24,8 +24,14 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_PS_VERSION_'))
-	exit;
+use PrestaShop\Decimal\Number;
+use PrestaShop\Decimal\Operation\Rounding;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+require_once __DIR__.'/vendor/autoload.php';
 
 class VatNumber extends TaxManagerModule
 {
@@ -33,7 +39,7 @@ class VatNumber extends TaxManagerModule
 	{
 		$this->name = 'vatnumber';
 		$this->tab = 'billing_invoicing';
-		$this->version = '2.1.0';
+		$this->version = '2.1.3';
 		$this->author = 'Onlineshop-Module';
 		$this->need_instance = 0;
 
@@ -52,25 +58,17 @@ class VatNumber extends TaxManagerModule
 	{
 		return
 		    parent::install()
-		    && Configuration::updateValue('VATNUMBER_MANAGEMENT', 1)
-		    && $this->registerHook('actionValidateCustomerAddressForm');
-	}
-
-	public function uninstall()
-	{
-		return (parent::uninstall() && Configuration::updateValue('VATNUMBER_MANAGEMENT', 0));
+		    && Configuration::updateValue('VATNUMBER_MANAGEMENT', 0)
+		    && $this->registerHook('actionValidateCustomerAddressForm')
+		    && $this->registerHook('actionValidateOrder');
 	}
 
 	public function enable($force_all = false)
 	{
 		parent::enable($force_all);
-		Configuration::updateValue('VATNUMBER_MANAGEMENT', 1);
-	}
-
-	public function disable($force_all = false)
-	{
-		parent::disable($force_all);
 		Configuration::updateValue('VATNUMBER_MANAGEMENT', 0);
+
+		return true;
 	}
 
 	public static function getPrefixIntracomVAT()
@@ -188,14 +186,11 @@ class VatNumber extends TaxManagerModule
 
 		if (Tools::isSubmit('submitVatNumber'))
 		{
-			if (Configuration::updateValue('VATNUMBER_ZONE_1', (int)Tools::getValue('VATNUMBER_ZONE_1')))
+			if (Configuration::updateValue('VATNUMBER_ZONE_1', json_encode(array_map('intval', Tools::getValue('VATNUMBER_ZONE_1')))))
 				$echo .= $this->displayConfirmation($this->l('The zone for your home country has been updated.'));
 
-			if (Configuration::updateValue('VATNUMBER_ZONE_2', (int)Tools::getValue('VATNUMBER_ZONE_2')))
+			if (Configuration::updateValue('VATNUMBER_ZONE_2', json_encode(array_map('intval', Tools::getValue('VATNUMBER_ZONE_2')))))
 				$echo .= $this->displayConfirmation($this->l('The zone for your EU countries has been updated.'));
-
-			if (Configuration::updateValue('VATNUMBER_CHECKING', (int)Tools::getValue('VATNUMBER_CHECKING')))
-				$echo .= ((bool)Tools::getValue('VATNUMBER_CHECKING') ? $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now enabled.')) : $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now disabled.')));
 		}
 		$echo .= $this->renderForm();
 
@@ -231,6 +226,7 @@ class VatNumber extends TaxManagerModule
 						'label' => $this->l('Zone home country'),
 						'desc' => $this->l('Select a zone here that corresponds to your home country'),
 						'name' => 'VATNUMBER_ZONE_1',
+						'multiple' => true,
 						'required' => true,
 						'default_value' => (int)$this->context->country->id_zone,
 						'options' => array(
@@ -241,9 +237,10 @@ class VatNumber extends TaxManagerModule
 					),
 					array(
 						'type' => 'select',
-						'label' => $this->l('Zone home country'),
-						'desc' => $this->l('Select a zone here that corresponds to the countries of the EU'),
+						'label' => $this->l('Zone EU countries'),
+						'desc' => $this->l('Select zones that corresponds to the countries of the EU'),
 						'name' => 'VATNUMBER_ZONE_2',
+						'multiple' => true,
 						'required' => true,
 						'default_value' => (int)$this->context->country->id_zone,
 						'options' => array(
@@ -252,25 +249,6 @@ class VatNumber extends TaxManagerModule
 							'name' => 'name',
 						)
 					),
-					array(
-						'type' => 'switch',
-						'label' => $this->l('Enable checking of the VAT number with the web service'),
-						'name' => 'VATNUMBER_CHECKING',
-						'is_bool' => true,
-						'desc' => $this->l('The verification by the web service is slow. Enabling this option can slow down your shop.'),
-						'values' => array(
-							array(
-								'id' => 'active_on',
-								'value' => 1,
-								'label' => $this->l('Enabled')
-							),
-							array(
-								'id' => 'active_off',
-								'value' => 0,
-								'label' => $this->l('Disabled')
-							)
-						),
-					)
 				),
 				'submit' => array(
 					'title' => $this->l('Save'),
@@ -303,25 +281,71 @@ class VatNumber extends TaxManagerModule
 	public function getConfigFieldsValues()
 	{
 		return array(
-			'VATNUMBER_ZONE_1' => Tools::getValue('VATNUMBER_ZONE_1', Configuration::get('VATNUMBER_ZONE_1')),
-			'VATNUMBER_ZONE_2' => Tools::getValue('VATNUMBER_ZONE_2', Configuration::get('VATNUMBER_ZONE_2')),
-			'VATNUMBER_CHECKING' => Tools::getValue('VATNUMBER_CHECKING', Configuration::get('VATNUMBER_CHECKING')),
+			'VATNUMBER_ZONE_1[]' => Tools::getValue('VATNUMBER_ZONE_1', json_decode(Configuration::get('VATNUMBER_ZONE_1'), true)),
+			'VATNUMBER_ZONE_2[]' => Tools::getValue('VATNUMBER_ZONE_2', json_decode(Configuration::get('VATNUMBER_ZONE_2'), true)),
 		);
 	}
 
-	public function hookActionValidateCustomerAddressForm(&$params)
+	public function hookActionValidateOrder($params)
 	{
-		$form = $params['form'];
-		$is_valid = true;
-
-		if (($vatNumber = $form->getField('vat_number')) && Configuration::get('VATNUMBER_MANAGEMENT') && Configuration::get('VATNUMBER_CHECKING')) {
-			$isAVatNumber = VatNumber::WebServiceCheck($vatNumber->getValue());
-			if (is_array($isAVatNumber) && count($isAVatNumber) > 0) {
-				$vatNumber->addError($isAVatNumber[0]);
-				$is_valid = false;
-			}
+		if (
+			empty($params['order'])
+			|| !($params['order'] instanceof Order)
+		) {
+			return;
 		}
 
-		return $is_valid;
+		$this->updateOrder($params['order']);
+	}
+
+	public function updateOrder(Order $order)
+    {
+		$idAddress = $order->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+
+        $address = new Address($idAddress);
+
+        if (VATNumberTaxManager::isAvailableForThisAddress($address)) {
+            $this->copyTaxInclToTaxExclInOrder($order);
+        } else {
+			$this->correctTaxExclValuesToPrecision($order, 2);
+		}
+    }
+
+	public function copyTaxInclToTaxExclInOrder(Order $order)
+    {
+        DB::getInstance()->execute('
+            UPDATE `' . _DB_PREFIX_ . 'order_detail`
+            SET
+                `unit_price_tax_excl` = `unit_price_tax_incl`,
+                `total_price_tax_excl` = `total_price_tax_incl`
+            WHERE
+                `id_order` = ' . (int) $order->id . '
+        ');
+
+        DB::getInstance()->execute('
+            UPDATE `' . _DB_PREFIX_ . 'orders`
+            SET
+                `total_products` = `total_products_wt`,
+                `total_shipping_tax_excl` = `total_shipping_tax_incl`,
+                `total_shipping` = `total_shipping_tax_incl`,
+                `total_paid_tax_excl` = `total_paid_tax_incl`,
+                `total_paid` = `total_paid_tax_incl`
+            WHERE
+                `id_order` = ' . (int) $order->id . '
+        ');
+
+		$order->total_shipping_tax_incl = (new Number((string)$order->total_shipping_tax_incl))->toPrecision(2, Rounding::ROUND_HALF_EVEN);
+
+        $order->total_products = $order->total_products_wt;
+        $order->total_shipping_tax_excl = $order->total_shipping_tax_incl;
+        $order->total_shipping = $order->total_shipping_tax_incl;
+        $order->total_paid_tax_excl = $order->total_paid_tax_incl;
+        $order->total_paid = $order->total_paid_tax_incl;
+    }
+
+	public function correctTaxExclValuesToPrecision(Order $order, int $precision = 6)
+	{
+		$order->total_shipping_tax_incl = (new Number((string)$order->total_shipping_tax_incl))->toPrecision($precision, Rounding::ROUND_HALF_EVEN);
+		$order->total_shipping = $order->total_shipping_tax_incl;
 	}
 }
