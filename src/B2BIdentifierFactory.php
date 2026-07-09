@@ -6,33 +6,33 @@ use Address;
 
 class B2BIdentifierFactory
 {
-    protected $id_zone_1 = 0;
-    protected $id_zone_2 = 0;
+    protected $home_country = 0;
+    protected $eu_countries = 0;
 
     public function __construct(
-        $id_zone_1,
-        $id_zone_2
+        $home_country,
+        $eu_countries
     ) {
-        $this->id_zone_1 = $id_zone_1;
-        $this->id_zone_2 = $id_zone_2;
-        if (!is_array($this->id_zone_1)) {
-            $this->id_zone_1 = [$this->id_zone_1];
+        $this->home_country = $home_country;
+        $this->eu_countries = $eu_countries;
+        if (!is_array($this->home_country)) {
+            $this->home_country = [$this->home_country];
         }
-        if (!is_array($this->id_zone_2)) {
-            $this->id_zone_2 = [$this->id_zone_2];
+        if (!is_array($this->eu_countries)) {
+            $this->eu_countries = [$this->eu_countries];
         }
     }
 
     public function getB2BIdentifierForAddress(Address $address): B2BIdentifier
     {
-        if (!$this->id_zone_1 || !$this->id_zone_2) {
-            throw new B2BIdentifierException('Zones are not set');
+        if (!$this->home_country || !$this->eu_countries) {
+            throw new B2BIdentifierException('Countries are not set');
         }
 
         return new B2BIdentifier(
 			$address,
-			$this->id_zone_1,
-			$this->id_zone_2
+			$this->home_country,
+			$this->eu_countries
 		);
     }
 }

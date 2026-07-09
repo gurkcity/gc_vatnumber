@@ -28,30 +28,34 @@ class B2BIdentifier
     const TYPE_TAX_EXCL = 2;
 
     private $address = null;
-    private $zones_1 = null;
-    private $zones_2 = null;
+
+    /** @var array */
+    private $home_country = [];
+
+    /** @var array */
+    private $eu_countries = [];
 
     public function __construct(
         Address $address,
-        array $zones_1,
-        array $zones_2
+        array $home_country,
+        array $eu_countries
     ) {
         $this->address = $address;
-        $this->zones_1 = $zones_1;
-        $this->zones_2 = $zones_2;
+        $this->home_country = $home_country;
+        $this->eu_countries = $eu_countries;
     }
 
     public function getB2BType(): int
     {
         if (
-            $this->isInZone3()
-            || $this->isCompanyWithVatInZone2()
+            $this->isNotHomeAndNotEu()
+            || $this->isCompanyWithVatInEu()
         ) {
             return self::TYPE_TAX_EXCL;
         } elseif (
-            $this->isCompanyWithVatInZone1()
-            || $this->isCompanyWithoutVatInZone2()
-            || $this->isCompanyWithVatInZone3()
+            $this->isCompanyWithVatInHome()
+            || $this->isCompanyWithoutVatInEu()
+            || $this->isCompanyWithVatInNotHomeAndNotEu()
         ) {
             return self::TYPE_TAX_IN_TOTAL;
         }
@@ -59,7 +63,7 @@ class B2BIdentifier
         return self::TYPE_WITH_TAX;
     }
 
-    private function isInZone1(): bool
+    private function isHomeCountry(): bool
     {
         $country = $this->getAddressCountry();
 
@@ -67,10 +71,10 @@ class B2BIdentifier
             return false;
         }
 
-        return in_array($country->id_zone, $this->zones_1);
+        return in_array($country->id, $this->home_country);
     }
 
-    private function isInZone2(): bool
+    private function isEuCountry(): bool
     {
         $country = $this->getAddressCountry();
 
@@ -78,32 +82,32 @@ class B2BIdentifier
             return false;
         }
 
-        return in_array($country->id_zone, $this->zones_2);
+        return in_array($country->id, $this->eu_countries);
     }
 
-    private function isInZone3(): bool
+    private function isNotHomeAndNotEu(): bool
     {
-        return !$this->isInZone1() && !$this->isInZone2();
+        return !$this->isHomeCountry() && !$this->isEuCountry();
     }
 
-    private function isCompanyWithVatInZone1(): bool
+    private function isCompanyWithVatInHome(): bool
     {
-        return $this->isCompany() && $this->hasVat() && $this->isInZone1();
+        return $this->isCompany() && $this->hasVat() && $this->isHomeCountry();
     }
 
-    private function isCompanyWithVatInZone2(): bool
+    private function isCompanyWithVatInEu(): bool
     {
-        return $this->isCompany() && $this->hasVat() && $this->isInZone2();
+        return $this->isCompany() && $this->hasVat() && $this->isEuCountry();
     }
 
-    private function isCompanyWithoutVatInZone2(): bool
+    private function isCompanyWithoutVatInEu(): bool
     {
-        return $this->isCompany() && !$this->hasVat() && $this->isInZone2();
+        return $this->isCompany() && !$this->hasVat() && $this->isEuCountry();
     }
 
-    private function isCompanyWithVatInZone3(): bool
+    private function isCompanyWithVatInNotHomeAndNotEu(): bool
     {
-        return $this->isCompany() && $this->hasVat() && $this->isInZone3();
+        return $this->isCompany() && $this->hasVat() && $this->isNotHomeAndNotEu();
     }
 
     private function isCompany(): bool

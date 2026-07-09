@@ -68,8 +68,8 @@ class VATNumberTaxManager implements TaxManagerInterface
 
 		try {
 			$b2b_identifier = (new B2BIdentifierFactory(
-				json_decode(Configuration::get('VATNUMBER_ZONE_1'), true),
-				json_decode(Configuration::get('VATNUMBER_ZONE_2'), true)
+				json_decode(Configuration::get('VATNUMBER_HOME_COUNTRY'), true),
+				json_decode(Configuration::get('VATNUMBER_EU_COUNTRIES'), true)
 			))->getB2BIdentifierForAddress($cached_address);
 
 			return $b2b_identifier->getB2BType() === B2BIdentifier::TYPE_TAX_EXCL;
