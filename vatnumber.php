@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-use PrestaShop\Decimal\Number;
+use PrestaShop\Decimal\DecimalNumber;
 use PrestaShop\Decimal\Operation\Rounding;
 
 if (!defined('_PS_VERSION_')) {
@@ -51,7 +51,7 @@ class VatNumber extends TaxManagerModule
 
         $this->displayName = $this->l('European VAT number');
         $this->description = $this->l('Enables you to enter the intra-community VAT number when creating the address. You must fill in the company field to allow entering the VAT number.');
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '8', 'max' => _PS_VERSION_);
     }
 
     public function install()
@@ -67,130 +67,25 @@ class VatNumber extends TaxManagerModule
     public function enable($force_all = false)
     {
         parent::enable($force_all);
+
         Configuration::updateValue('VATNUMBER_MANAGEMENT', 0);
 
         return true;
     }
 
-    public static function getPrefixIntracomVAT()
-    {
-        $intracom_array = array(
-            'AT' => 'AT',
-            //Austria
-            'BE' => 'BE',
-            //Belgium
-            'DK' => 'DK',
-            //Denmark
-            'FI' => 'FI',
-            //Finland
-            'FR' => 'FR',
-            //France
-            'FX' => 'FR',
-            //France métropolitaine
-            'DE' => 'DE',
-            //Germany
-            'GR' => 'EL',
-            //Greece
-            'IE' => 'IE',
-            //Irland
-            'IT' => 'IT',
-            //Italy
-            'LU' => 'LU',
-            //Luxembourg
-            'NL' => 'NL',
-            //Netherlands
-            'PT' => 'PT',
-            //Portugal
-            'ES' => 'ES',
-            //Spain
-            'SE' => 'SE',
-            //Sweden
-            'GB' => 'GB',
-            //United Kingdom
-            'CY' => 'CY',
-            //Cyprus
-            'EE' => 'EE',
-            //Estonia
-            'HU' => 'HU',
-            //Hungary
-            'LV' => 'LV',
-            //Latvia
-            'LT' => 'LT',
-            //Lithuania
-            'MT' => 'MT',
-            //Malta
-            'PL' => 'PL',
-            //Poland
-            'SK' => 'SK',
-            //Slovakia
-            'CZ' => 'CZ',
-            //Czech Republic
-            'SI' => 'SI',
-            //Slovenia
-            'RO' => 'RO',
-            //Romania
-            'BG' => 'BG',
-            //Bulgaria
-            'HR' => 'HR',
-            //Croatia
-        );
-
-        return $intracom_array;
-    }
-
-    public static function isApplicable($id_country)
-    {
-        return (((int)$id_country && array_key_exists(Country::getIsoById($id_country), self::getPrefixIntracomVAT())) ? 1 : 0);
-    }
-
-    public static function WebServiceCheck($vat_number)
-    {
-        if (empty($vat_number))
-            return array();
-        $vat_number = str_replace(' ', '', $vat_number);
-        $prefix = Tools::substr($vat_number, 0, 2);
-        if (array_search($prefix, self::getPrefixIntracomVAT()) === false)
-            return array(Tools::displayError('Invalid VAT number'));
-        $vat = Tools::substr($vat_number, 2);
-        $url = 'http://ec.europa.eu/taxation_customs/vies/viesquer.do?ms='.urlencode($prefix).'&iso='.urlencode($prefix).'&vat='.urlencode($vat);
-        @ini_set('default_socket_timeout', 2);
-        for ($i = 0; $i < 2; $i++)
-        {
-            if ($page_res = Tools::file_get_contents($url, false, null, 10))
-            {
-                if (preg_match('/invalid VAT number/i', $page_res))
-                {
-                    @ini_restore('default_socket_timeout');
-
-                    return array(Tools::displayError('VAT number not found'));
-                }
-                else if (preg_match('/valid VAT number/i', $page_res))
-                {
-                    @ini_restore('default_socket_timeout');
-
-                    return array();
-                }
-                else
-                    ++$i;
-            }
-            else
-                sleep(1);
-        }
-        @ini_restore('default_socket_timeout');
-
-        return array(Tools::displayError('VAT number validation service unavailable'));
-    }
-
     public function getContent()
     {
         $echo = '';
+
         if (Tools::isSubmit('submitVatNumber')) {
             $home_country = Tools::getValue('VATNUMBER_HOME_COUNTRY', []);
+
             if (!is_array($home_country)) {
                 $home_country = [];
             }
 
             $eu_countries = Tools::getValue('vatnumber-eu-countries-listBox', []);
+
             if (!is_array($eu_countries)) {
                 $eu_countries = [];
             }
@@ -203,6 +98,7 @@ class VatNumber extends TaxManagerModule
                 $echo .= $this->displayConfirmation($this->l('The settings has been updated successfully'));
             }
         }
+
         $echo .= $this->renderForm();
 
         return $echo;
@@ -272,7 +168,6 @@ class VatNumber extends TaxManagerModule
         $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
         $helper->default_form_language = $lang->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
-        $this->fields_form = array();
 
         $helper->identifier = $this->identifier;
         $helper->submit_action = '';
@@ -342,7 +237,7 @@ class VatNumber extends TaxManagerModule
                 `id_order` = ' . (int) $order->id . '
         ');
 
-        $order->total_shipping_tax_incl = (new Number((string)$order->total_shipping_tax_incl))->toPrecision(2, Rounding::ROUND_HALF_EVEN);
+        $order->total_shipping_tax_incl = (new DecimalNumber((string)$order->total_shipping_tax_incl))->toPrecision(2, Rounding::ROUND_HALF_EVEN);
 
         $order->total_products = $order->total_products_wt;
         $order->total_shipping_tax_excl = $order->total_shipping_tax_incl;
@@ -353,15 +248,15 @@ class VatNumber extends TaxManagerModule
 
     public function correctTaxExclValuesToPrecision(Order $order, int $precision = 6)
     {
-        $order->total_shipping_tax_incl = (new Number((string)$order->total_shipping_tax_incl))->toPrecision($precision, Rounding::ROUND_HALF_EVEN);
+        $order->total_shipping_tax_incl = (new DecimalNumber((string)$order->total_shipping_tax_incl))->toPrecision($precision, Rounding::ROUND_HALF_EVEN);
         $order->total_shipping = $order->total_shipping_tax_incl;
     }
 
     private function renderCountriesList()
     {
         $zones_array = array();
-        $this->zones = Zone::getZones();
-        foreach ($this->zones as $zone) {
+
+        foreach (Zone::getZones() as $zone) {
             $zones_array[$zone['id_zone']] = $zone['name'];
         }
 
@@ -465,19 +360,20 @@ class VatNumber extends TaxManagerModule
 
     private function filterCountries(array $params, $p = null, $limit = null, $orderBy = null, $orderWay = null, $getTotalRows = false)
     {
-        $sql = 'SELECT
-            SQL_CALC_FOUND_ROWS
-            c.`id_country`,
-            cl.`name`,
-            c.`iso_code`,
-            c.`call_prefix`,
-            z.`id_zone`,
-            c.`active`,
-            z.`name` AS zone
-        FROM `' . _DB_PREFIX_ . 'country` c
-        LEFT JOIN `' . _DB_PREFIX_ . 'country_lang` cl ON (cl.`id_country` = c.`id_country` AND cl.`id_lang` = ' . (int) $this->context->language->id . ')
-        LEFT JOIN `' . _DB_PREFIX_ . 'zone` z ON (z.`id_zone` = c.`id_zone`)
-        WHERE 1'
+        $sql = '
+            SELECT
+                SQL_CALC_FOUND_ROWS
+                c.`id_country`,
+                cl.`name`,
+                c.`iso_code`,
+                c.`call_prefix`,
+                z.`id_zone`,
+                c.`active`,
+                z.`name` AS zone
+            FROM `' . _DB_PREFIX_ . 'country` c
+            LEFT JOIN `' . _DB_PREFIX_ . 'country_lang` cl ON (cl.`id_country` = c.`id_country` AND cl.`id_lang` = ' . (int) $this->context->language->id . ')
+            LEFT JOIN `' . _DB_PREFIX_ . 'zone` z ON (z.`id_zone` = c.`id_zone`)
+            WHERE 1'
             . ((isset($params['id_country']) && trim($params['id_country']) !== '') ? ' AND c.id_country = ' . (int) $params['id_country'] : '')
             . ((isset($params['name']) && trim($params['name']) !== '') ? ' AND cl.name LIKE \'%' . pSql($params['name']) . '%\'' : '')
             . ((isset($params['iso_code']) && trim($params['iso_code']) !== '') ? ' AND c.iso_code LIKE \'%' . pSql($params['iso_code']) . '%\'' : '')
@@ -515,30 +411,37 @@ class VatNumber extends TaxManagerModule
                 $key = isset($options['filter_key']) ? $options['filter_key'] : $field;
                 $this->context->cookie->__unset($list_id . 'Filter_' . $key);
             }
+
             if (isset($this->context->cookie->{$list_id . 'Orderby'})) {
                 unset($this->context->cookie->{$list_id . 'Orderby'});
             }
+
             if (isset($this->context->cookie->{$list_id . 'Orderway'})) {
                 unset($this->context->cookie->{$list_id . 'Orderway'});
             }
+
             $_POST = array();
         } elseif (Tools::getValue($list_id . 'Orderby')
             || Tools::getValue($list_id . 'Orderway')
         ) {
             $orderBy = Tools::getValue($list_id . 'Orderby');
             $orderWay = Tools::getValue($list_id . 'Orderway');
+
             if (Validate::isOrderBy($orderBy) && isset($fields_list[$orderBy])) {
                 $this->context->cookie->{$list_id . 'Orderby'} = $orderBy;
             }
+
             if (Validate::isOrderWay($orderWay)) {
                 $this->context->cookie->{$list_id . 'Orderway'} = $orderWay;
             }
         }
 
         $result = array();
+
         foreach ($fields_list as $field => $options) {
             $key = isset($options['filter_key']) ? $options['filter_key'] : $field;
             $value = $this->context->cookie->__get($list_id . 'Filter_' . $key);
+
             if ($options['type'] == 'date') {
                 $value = json_decode($value, true);
                 $value = $value ? array('from' => $value[0], 'to' => $value[1]) : false;

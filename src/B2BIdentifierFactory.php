@@ -15,9 +15,11 @@ class B2BIdentifierFactory
     ) {
         $this->home_country = $home_country;
         $this->eu_countries = $eu_countries;
+
         if (!is_array($this->home_country)) {
             $this->home_country = [$this->home_country];
         }
+
         if (!is_array($this->eu_countries)) {
             $this->eu_countries = [$this->eu_countries];
         }
