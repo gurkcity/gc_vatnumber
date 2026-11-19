@@ -17,7 +17,8 @@
         "Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\": "src/"
     },
     "classmap": [
-        "vatnumber.php"
+        "vatnumber.php",
+        "VATNumberTaxManager.php"
     ],
     "exclude-from-classmap": []
   },

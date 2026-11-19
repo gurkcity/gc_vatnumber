@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit35ed8ccb628c27a84fc30e22d3a6c565
 {
     public static $prefixLengthsPsr4 = array (
-        'O' => 
+        'O' =>
         array (
             'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' => 45,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' => 
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -22,6 +22,7 @@ class ComposerStaticInit35ed8ccb628c27a84fc30e22d3a6c565
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'VATNumberTaxManager' => __DIR__ . '/../..' . '/VATNumberTaxManager.php',
         'VatNumber' => __DIR__ . '/../..' . '/vatnumber.php',
     );
 
