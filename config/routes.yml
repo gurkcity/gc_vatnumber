@@ -1,0 +1,141 @@
+
+# Module main route
+gc_vatnumber:
+  path: gc_vatnumber
+  methods: [GET, POST]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\ConfigurationAdminController::indexAction
+    _legacy_controller: 'GcVatnumberConfigurationAdminController'
+    _legacy_link: 'GcVatnumberConfigurationAdminController'
+
+# License
+gc_vatnumber_license:
+  path: gc_vatnumber/license
+  methods: [GET, POST]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LicenseAdminController::indexAction
+    _legacy_controller: 'GcVatnumberLicenseAdminController'
+    _legacy_link: 'GcVatnumberLicenseAdminController'
+
+gc_vatnumber_license_content:
+  path: gc_vatnumber/license/content
+  methods: [GET, POST]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LicenseAdminController::displayLicenseTextAction
+    _legacy_controller: 'GcVatnumberLicenseAdminController'
+    _legacy_link: 'GcVatnumberLicenseAdminController'
+
+# Configuration
+gc_vatnumber_configuration:
+  path: gc_vatnumber/configuration
+  methods: [GET, POST, PATCH]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\ConfigurationAdminController::indexAction
+    _legacy_controller: 'GcVatnumberConfigurationAdminController'
+    _legacy_link: 'GcVatnumberConfigurationAdminController'
+
+
+
+# Logs
+gc_vatnumber_logs:
+  path: gc_vatnumber/logs
+  methods: [GET, POST]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController::indexAction
+    _legacy_controller: 'GcVatnumberLogsAdminController'
+    _legacy_link: 'GcVatnumberLogsAdminController'
+
+gc_vatnumber_logs_clear:
+  path: gc_vatnumber/logs/clear
+  methods: [ GET ]
+  defaults:
+    _controller:  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController::clearAction
+    _legacy_controller: GcVatnumberLogsAdminController
+    _legacy_link: GcVatnumberLogsAdminController
+
+gc_vatnumber_logs_view:
+  path: gc_vatnumber/logs/view/{filename}
+  methods: [ GET ]
+  defaults:
+    _controller:  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController::viewAction
+    _legacy_controller: GcVatnumberLogsAdminController
+    _legacy_link: GcVatnumberLogsAdminController
+  requirements:
+    filename: '[0-9a-z_-]+\.log'
+
+gc_vatnumber_logs_delete:
+  path: gc_vatnumber/logs/delete/{filename}
+  methods: [ GET ]
+  defaults:
+    _controller:  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController::deleteAction
+    _legacy_controller: GcVatnumberLogsAdminController
+    _legacy_link: GcVatnumberLogsAdminController
+  requirements:
+    filename: '[0-9a-z_-]+\.log'
+
+# Maintenance
+gc_vatnumber_maintenance:
+  path: gc_vatnumber/maintenance
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_hooks_reset:
+  path: gc_vatnumber/maintenance/hooks/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceHooksResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_tabs_reset:
+  path: gc_vatnumber/maintenance/tabs/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceTabsResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_sql_reset:
+  path: gc_vatnumber/maintenance/sql/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceSqlResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_config_reset:
+  path: gc_vatnumber/maintenance/config/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceConfigResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_controller_reset:
+  path: gc_vatnumber/maintenance/controller/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceControllerResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_orderstate_reset:
+  path: gc_vatnumber/maintenance/orderstates/reset
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceOrderstatesResetAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+gc_vatnumber_maintenance_caching_clear:
+  path: gc_vatnumber/maintenance/caching/clear
+  methods: [GET]
+  defaults:
+    _controller: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController::maintenanceCachingClearAction
+    _legacy_controller: 'GcVatnumberMaintenanceAdminController'
+    _legacy_link: 'GcVatnumberMaintenanceAdminController'
+
+# custom routes here:

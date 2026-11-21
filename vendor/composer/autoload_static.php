@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit35ed8ccb628c27a84fc30e22d3a6c565
 {
     public static $prefixLengthsPsr4 = array (
-        'O' =>
+        'O' => 
         array (
             'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' => 45,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' =>
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -22,8 +22,64 @@ class ComposerStaticInit35ed8ccb628c27a84fc30e22d3a6c565
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'VATNumberTaxManager' => __DIR__ . '/../..' . '/VATNumberTaxManager.php',
-        'VatNumber' => __DIR__ . '/../..' . '/vatnumber.php',
+        'GC_Vatnumber' => __DIR__ . '/../..' . '/gc_vatnumber.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\B2BIdentifier' => __DIR__ . '/../..' . '/src/B2BIdentifier.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\B2BIdentifierException' => __DIR__ . '/../..' . '/src/B2BIdentifierException.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\B2BIdentifierFactory' => __DIR__ . '/../..' . '/src/B2BIdentifierFactory.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Command\\Command' => __DIR__ . '/../..' . '/src/Command/Command.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Command\\CronCommand' => __DIR__ . '/../..' . '/src/Command/CronCommand.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Controller\\AdminController' => __DIR__ . '/../..' . '/src/Controller/AdminController.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Controller\\ConfigurationAdminController' => __DIR__ . '/../..' . '/src/Controller/ConfigurationAdminController.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Controller\\LicenseAdminController' => __DIR__ . '/../..' . '/src/Controller/LicenseAdminController.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Controller\\LogAdminController' => __DIR__ . '/../..' . '/src/Controller/LogAdminController.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Controller\\MaintenanceAdminController' => __DIR__ . '/../..' . '/src/Controller/MaintenanceAdminController.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Exception\\CronException' => __DIR__ . '/../..' . '/src/Exception/CronException.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Exception\\InstallException' => __DIR__ . '/../..' . '/src/Exception/InstallException.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Exception\\LogException' => __DIR__ . '/../..' . '/src/Exception/LogException.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Exception\\SettingException' => __DIR__ . '/../..' . '/src/Exception/SettingException.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\AbstractFormDataProvider' => __DIR__ . '/../..' . '/src/Form/AbstractFormDataProvider.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\DataProvider\\ConfigurationFormDataProvider' => __DIR__ . '/../..' . '/src/Form/DataProvider/ConfigurationFormDataProvider.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\DataProvider\\LicenseFormDataProvider' => __DIR__ . '/../..' . '/src/Form/DataProvider/LicenseFormDataProvider.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\DataProvider\\LogFormDataProvider' => __DIR__ . '/../..' . '/src/Form/DataProvider/LogFormDataProvider.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\Type\\ConfigurationType' => __DIR__ . '/../..' . '/src/Form/Type/ConfigurationType.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\Type\\ImageFileType' => __DIR__ . '/../..' . '/src/Form/Type/ImageFileType.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\Type\\LicenseType' => __DIR__ . '/../..' . '/src/Form/Type/LicenseType.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Form\\Type\\LogType' => __DIR__ . '/../..' . '/src/Form/Type/LogType.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Log\\LogLevel' => __DIR__ . '/../..' . '/src/Log/LogLevel.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Log\\LogRepository' => __DIR__ . '/../..' . '/src/Log/LogRepository.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Log\\Logger' => __DIR__ . '/../..' . '/src/Log/Logger.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Mail\\MailPartialTemplateRenderer' => __DIR__ . '/../..' . '/src/Mail/MailPartialTemplateRenderer.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\CachingMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/CachingMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\ConfigMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/ConfigMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\ControllerMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/ControllerMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\HookMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/HookMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\Maintenance' => __DIR__ . '/../..' . '/src/Maintenance/Maintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\MaintenanceInterface' => __DIR__ . '/../..' . '/src/Maintenance/MaintenanceInterface.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\OrderstateMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/OrderstateMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\SqlMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/SqlMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\TabMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/TabMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Maintenance\\TemplateMaintenance' => __DIR__ . '/../..' . '/src/Maintenance/TemplateMaintenance.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Module\\AbstractSettings' => __DIR__ . '/../..' . '/src/Module/AbstractSettings.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Module\\ConfigurationAdapter' => __DIR__ . '/../..' . '/src/Module/ConfigurationAdapter.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Module\\Install' => __DIR__ . '/../..' . '/src/Module/Install.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Module\\OverrideTools' => __DIR__ . '/../..' . '/src/Module/OverrideTools.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Module\\TranslationLoader' => __DIR__ . '/../..' . '/src/Module/TranslationLoader.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Plugin\\PluginInterface' => __DIR__ . '/../..' . '/src/Plugin/PluginInterface.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Plugin\\PluginLoader' => __DIR__ . '/../..' . '/src/Plugin/PluginLoader.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Plugin\\PluginLoaderFactory' => __DIR__ . '/../..' . '/src/Plugin/PluginLoaderFactory.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Response\\Json' => __DIR__ . '/../..' . '/src/Response/Json.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings' => __DIR__ . '/../..' . '/src/Settings.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Config' => __DIR__ . '/../..' . '/src/Settings/Config.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Controller' => __DIR__ . '/../..' . '/src/Settings/Controller.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Hook' => __DIR__ . '/../..' . '/src/Settings/Hook.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Orderstate' => __DIR__ . '/../..' . '/src/Settings/Orderstate.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\SettingsInterface' => __DIR__ . '/../..' . '/src/Settings/SettingsInterface.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Sql' => __DIR__ . '/../..' . '/src/Settings/Sql.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Tab' => __DIR__ . '/../..' . '/src/Settings/Tab.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleHelperTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleHelperTrait.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleLicenseTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleLicenseTrait.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleTrait.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ObjectAdminControllerTrait' => __DIR__ . '/../..' . '/src/Traits/ObjectAdminControllerTrait.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

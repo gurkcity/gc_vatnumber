@@ -1,0 +1,261 @@
+
+services:
+  _defaults:
+    public: true
+    autowire: true
+    autoconfigure: true
+
+  # Module
+  onlineshopmodule.module.vatnumber.gc_vatnumber:
+    class: "GC_Vatnumber"
+    factory: ["Module", "getInstanceByName"]
+    arguments:
+      - 'gc_vatnumber'
+
+  # Abstract Form Data Provider
+  onlineshopmodule.module.vatnumber.form.data_provider:
+    class: 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\AbstractFormDataProvider'
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.configurationadapter'
+      - '@prestashop.adapter.shop.context'
+      - '@prestashop.adapter.feature.multistore'
+      - '@translator'
+
+  # Configuration Adapter
+  onlineshopmodule.module.vatnumber.configurationadapter:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Module\ConfigurationAdapter
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@prestashop.adapter.legacy.configuration'
+      - "@=service('prestashop.adapter.legacy.context').getAvailableLanguages()"
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  # Settings
+  onlineshopmodule.module.vatnumber.settings:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Settings
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  # Controller
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LicenseAdminController:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LicenseAdminController
+    parent: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController
+    public: true
+    autowire: true
+    autoconfigure: true
+    tags: ['controller.service_arguments']
+
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\ConfigurationAdminController:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\ConfigurationAdminController
+    parent: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController
+    public: true
+    autowire: true
+    autoconfigure: true
+    tags: ['controller.service_arguments']
+
+
+
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\LogAdminController
+    parent: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController
+    public: true
+    autowire: true
+    autoconfigure: true
+    tags: ['controller.service_arguments']
+
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\MaintenanceAdminController
+    parent: Onlineshopmodule\PrestaShop\Module\Vatnumber\Controller\AdminController
+    public: true
+    autowire: true
+    autoconfigure: true
+    tags: ['controller.service_arguments']
+
+  # License
+  onlineshopmodule.module.vatnumber.form.handler.license:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@onlineshopmodule.module.vatnumber.form.data_provider.license'
+      - 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\LicenseType'
+      - 'AdminVatnumberLicense'
+      - 'license'
+
+  onlineshopmodule.module.vatnumber.form.data_provider.license:
+    class: 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\DataProvider\LicenseFormDataProvider'
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.configurationadapter'
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+
+  onlineshopmodule.module.vatnumber.form.type.license:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\LicenseType
+    parent: 'form.type.translatable.aware'
+    public: true
+    tags:
+      - { name: form.type }
+
+  onlineshopmodule.module.vatnumber.command:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Command\Command
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+    tags:
+      - { name: 'console.command' }
+
+
+  # Configuration
+  onlineshopmodule.module.vatnumber.form.handler.configuration:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@onlineshopmodule.module.vatnumber.form.data_provider.configuration'
+      - 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\ConfigurationType'
+      - 'AdminVatnumberConfiguration'
+      - 'configuration'
+
+  onlineshopmodule.module.vatnumber.form.data_provider.configuration:
+    class: 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\DataProvider\ConfigurationFormDataProvider'
+    parent: 'onlineshopmodule.module.vatnumber.form.data_provider'
+
+  onlineshopmodule.module.vatnumber.form.type.configuration:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\ConfigurationType
+    parent: 'form.type.translatable.aware'
+    public: true
+    arguments:
+      $context: '@=service("prestashop.adapter.legacy.context").getContext()'
+      $module: '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+    tags:
+      - { name: form.type }
+
+
+  # Logs
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Log\LogRepository:
+    arguments:
+      - '@filesystem'
+      - 'gc_vatnumber/'
+
+  onlineshopmodule.module.vatnumber.logrepository:
+    alias: Onlineshopmodule\PrestaShop\Module\Vatnumber\Log\LogRepository
+
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Log\LogLevel:
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.configurationadapter'
+
+  onlineshopmodule.module.vatnumber.loglevel:
+    alias: Onlineshopmodule\PrestaShop\Module\Vatnumber\Log\LogLevel
+
+  onlineshopmodule.module.vatnumber.logger:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Log\Logger
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.logrepository'
+      - '@onlineshopmodule.module.vatnumber.loglevel'
+
+  onlineshopmodule.module.vatnumber.form.handler.log:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@onlineshopmodule.module.vatnumber.form.data_provider.log'
+      - 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\LogType'
+      - 'AdminVatnumberLog'
+      - 'log'
+
+  onlineshopmodule.module.vatnumber.form.data_provider.log:
+    class: 'Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\DataProvider\LogFormDataProvider'
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.loglevel'
+
+  onlineshopmodule.module.vatnumber.form.type.log:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Form\Type\LogType
+    parent: 'form.type.translatable.aware'
+    public: true
+    tags:
+      - { name: form.type }
+
+  # Maintenance
+  Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\Maintenance:
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.maintenance.hook'
+      - '@onlineshopmodule.module.vatnumber.maintenance.tab'
+      - '@onlineshopmodule.module.vatnumber.maintenance.sql'
+      - '@onlineshopmodule.module.vatnumber.maintenance.config'
+      - '@onlineshopmodule.module.vatnumber.maintenance.controller'
+      - '@onlineshopmodule.module.vatnumber.maintenance.orderstates'
+      - '@onlineshopmodule.module.vatnumber.maintenance.template'
+      - '@onlineshopmodule.module.vatnumber.maintenance.caching'
+
+  onlineshopmodule.module.vatnumber.maintenance:
+    alias: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\Maintenance
+
+  onlineshopmodule.module.vatnumber.maintenance.hook:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\HookMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  onlineshopmodule.module.vatnumber.maintenance.tab:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\TabMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@prestashop.core.admin.tab.repository'
+      - '@prestashop.adapter.module.tab.register'
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+      - '@=service("prestashop.adapter.legacy.context").getLanguages()'
+
+  onlineshopmodule.module.vatnumber.maintenance.sql:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\SqlMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  onlineshopmodule.module.vatnumber.maintenance.config:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\ConfigMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@onlineshopmodule.module.vatnumber.configurationadapter'
+      - '@prestashop.adapter.shop.context'
+      - '@=service("prestashop.adapter.legacy.context").getAvailableLanguages()'
+
+  onlineshopmodule.module.vatnumber.maintenance.controller:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\ControllerMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  onlineshopmodule.module.vatnumber.maintenance.orderstates:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\OrderstateMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+
+  onlineshopmodule.module.vatnumber.maintenance.template:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\TemplateMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+      - '@finder'
+      - '@PrestaShop\PrestaShop\Core\Context\ShopContext'
+
+  onlineshopmodule.module.vatnumber.maintenance.caching:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Maintenance\CachingMaintenance
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+
+  # Tools
+  onlineshopmodule.module.vatnumber.module.overridetools:
+    class: Onlineshopmodule\PrestaShop\Module\Vatnumber\Module\OverrideTools
+    arguments:
+      - '@onlineshopmodule.module.vatnumber.gc_vatnumber'
+
+# custom services here:

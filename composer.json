@@ -1,30 +1,50 @@
 {
-  "name": "prestashop/vatnumber",
-  "description": "PrestaShop module vatnumber",
-  "homepage": "https://www.onlineshop-module.de",
-  "license": "AFL-3.0",
-  "authors": [
-    {
-        "name": "Markus Engel",
-        "email": "info@onlineshop-module.de"
-    }
-  ],
-  "require": {
-    "php": ">=5.3.2"
-  },
-  "autoload": {
-    "psr-4": {
-        "Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\": "src/"
-    },
-    "classmap": [
-        "vatnumber.php",
-        "VATNumberTaxManager.php"
+    "name": "onlineshopmodule/gc_vatnumber",
+    "description": "PrestaShop module to do some fancy stuff ;-)",
+    "type": "prestashop-module",
+    "homepage": "https://www.onlineshop-module.de",
+    "license": "Commercial",
+    "authors": [
+        {
+            "name": "Markus Engel",
+            "email": "info@onlineshop-module.de"
+        }
     ],
-    "exclude-from-classmap": []
-  },
-  "config": {
-      "preferred-install": "dist",
-      "prepend-autoloader": false
-  },
-  "type": "prestashop-module"
+    "autoload": {
+        "psr-4": {
+            "Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\": "src/"
+        },
+        "classmap": [
+            "gc_vatnumber.php"
+        ],
+        "exclude-from-classmap": []
+    },
+    "config": {
+        "preferred-install": "dist",
+        "classmap-authoritative": true,
+        "prepend-autoloader": false,
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">= 8.1"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.11",
+        "prestashop/php-dev-tools": "^4.3"
+    },
+    "scripts": {
+        "autoindex": [
+            "@php vendor/bin/autoindex --exclude=\".github,.webpack,_dev,node_modules,vendor\""
+        ],
+        "set-license-header": [
+            "@php ./vendor/bin/header-stamp --license=\"./license_header.txt\" --exclude=\".github,.webpack,_dev,node_modules,vendor\""
+        ],
+        "cs-fixer": [
+            "@php vendor/bin/php-cs-fixer fix --using-cache=no"
+        ],
+        "phpstan": [
+            "./phpstan.bat"
+        ]
+    }
 }
