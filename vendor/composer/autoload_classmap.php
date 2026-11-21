@@ -61,8 +61,11 @@ return array(
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\SettingsInterface' => $baseDir . '/src/Settings/SettingsInterface.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Sql' => $baseDir . '/src/Settings/Sql.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Tab' => $baseDir . '/src/Settings/Tab.php',
+    'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleFunctionsTrait' => $baseDir . '/src/Traits/ModuleFunctionsTrait.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleHelperTrait' => $baseDir . '/src/Traits/ModuleHelperTrait.php',
+    'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleHookTrait' => $baseDir . '/src/Traits/ModuleHookTrait.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleLicenseTrait' => $baseDir . '/src/Traits/ModuleLicenseTrait.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleTrait' => $baseDir . '/src/Traits/ModuleTrait.php',
     'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ObjectAdminControllerTrait' => $baseDir . '/src/Traits/ObjectAdminControllerTrait.php',
+    'VATNumberTaxManager' => $baseDir . '/VATNumberTaxManager.php',
 );

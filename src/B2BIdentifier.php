@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * GC Vatnumber
+ * Module for PrestaShop E-Commerce Software
+ *
+ * @author    Markus Engel <info@onlineshop-module.de>
+ * @copyright Copyright (c) 2026, Onlineshop-Module.de
+ * @license   commercial, see licence.txt
+ */
+
+/**
  * 1. Fall: Rechnung inkl. Mwst
  * B2C Kunde in DE und EU
  * B2B Kunde ohne Vat in DE

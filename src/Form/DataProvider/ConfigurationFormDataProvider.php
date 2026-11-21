@@ -21,6 +21,8 @@ class ConfigurationFormDataProvider extends AbstractFormDataProvider implements 
         return [
             'js_defer' => $this->configurationAdapter->get('JS_DEFER'),
             'theme' => $this->configurationAdapter->get('THEME'),
+            'home_country' => json_decode($this->configurationAdapter->get('HOME_COUNTRY')),
+            'eu_countries' => json_decode($this->configurationAdapter->get('EU_COUNTRIES')),
         ];
     }
 
@@ -32,6 +34,16 @@ class ConfigurationFormDataProvider extends AbstractFormDataProvider implements 
 
         if (isset($data['theme'])) {
             $this->updateConfiguration('THEME', 'theme', $data);
+        }
+
+        if (isset($data['home_country'])) {
+            $data['home_country'] = json_encode($data['home_country']);
+            $this->updateConfiguration('HOME_COUNTRY', 'home_country', $data);
+        }
+
+        if (isset($data['eu_countries'])) {
+            $data['eu_countries'] = json_encode($data['eu_countries']);
+            $this->updateConfiguration('EU_COUNTRIES', 'eu_countries', $data);
         }
 
         return [];

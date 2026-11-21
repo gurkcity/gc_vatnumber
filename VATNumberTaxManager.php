@@ -1,28 +1,13 @@
 <?php
-/*
-* 2007-2017 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2017 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+
+/**
+ * GC Vatnumber
+ * Module for PrestaShop E-Commerce Software
+ *
+ * @author    Markus Engel <info@onlineshop-module.de>
+ * @copyright Copyright (c) 2026, Onlineshop-Module.de
+ * @license   commercial, see licence.txt
+ */
 
 use Onlineshopmodule\PrestaShop\Module\Vatnumber\B2BIdentifier;
 use Onlineshopmodule\PrestaShop\Module\Vatnumber\B2BIdentifierException;
@@ -68,8 +53,8 @@ class VATNumberTaxManager implements TaxManagerInterface
 
 		try {
 			$b2b_identifier = (new B2BIdentifierFactory(
-				json_decode(Configuration::get('VATNUMBER_HOME_COUNTRY'), true),
-				json_decode(Configuration::get('VATNUMBER_EU_COUNTRIES'), true)
+				json_decode(Configuration::get('GC_VATNUMBER_HOME_COUNTRY'), true),
+				json_decode(Configuration::get('GC_VATNUMBER_EU_COUNTRIES'), true)
 			))->getB2BIdentifierForAddress($cached_address);
 
 			return $b2b_identifier->getB2BType() === B2BIdentifier::TYPE_TAX_EXCL;
@@ -86,6 +71,6 @@ class VATNumberTaxManager implements TaxManagerInterface
 		$tax = new Tax();
 		$tax->rate = 0;
 
-		return new TaxCalculator(array($tax));
+		return new TaxCalculator([$tax]);
 	}
 }

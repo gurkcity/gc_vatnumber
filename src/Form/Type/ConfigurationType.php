@@ -23,22 +23,51 @@ class ConfigurationType extends TranslatorAwareType
     protected $context;
     protected $config;
     protected $module;
+    protected $countryChoices;
 
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
         \Context $context,
-        \GC_Vatnumber $module
+        \GC_Vatnumber $module,
+        array $countryChoices
     ) {
         parent::__construct($translator, $locales);
 
         $this->context = $context;
         $this->module = $module;
         $this->config = $this->module->config;
+        $this->countryChoices = $countryChoices;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('home_country', ChoiceType::class, [
+                'label' => $this->trans('Home country', 'Modules.Gcvatnumber.Admin'),
+                'help' => $this->trans('Select a country here that corresponds to you home country', 'Modules.Gcvatnumber.Admin'),
+                'choices' => $this->resolveCountryChoices(),
+                'multistore_configuration_key' => $this->config->getName('HOME_COUNTRY'),
+                'required' => true,
+                'placeholder' => false,
+                'multiple' => true,
+                'attr' => [
+                    'size' => 10,
+                ],
+            ])
+            ->add('eu_countries', ChoiceType::class, [
+                'label' => $this->trans('Select EU-Countries', 'Modules.Gcvatnumber.Admin'),
+                'choices' => $this->resolveCountryChoices(),
+                'multistore_configuration_key' => $this->config->getName('EU_COUNTRIES'),
+                'required' => true,
+                'placeholder' => false,
+                'multiple' => true,
+                'attr' => [
+                    'size' => 10,
+                ],
+            ])
+        ;
+
         if ($this->module->hasJavascriptFiles()) {
             $builder
                 ->add('js_defer', SwitchType::class, [
@@ -75,5 +104,16 @@ class ConfigurationType extends TranslatorAwareType
     public function getParent(): string
     {
         return MultistoreConfigurationType::class;
+    }
+
+    private function resolveCountryChoices(): array
+    {
+        $countryChoices = [];
+        foreach($this->countryChoices as $name => $id) {
+            $key = $name . ' (ID: ' . $id . ')';
+            $countryChoices[$key] = $id;
+        }
+
+        return $countryChoices;
     }
 }

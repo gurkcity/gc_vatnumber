@@ -76,10 +76,13 @@ class ComposerStaticInit35ed8ccb628c27a84fc30e22d3a6c565
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\SettingsInterface' => __DIR__ . '/../..' . '/src/Settings/SettingsInterface.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Sql' => __DIR__ . '/../..' . '/src/Settings/Sql.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Settings\\Tab' => __DIR__ . '/../..' . '/src/Settings/Tab.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleFunctionsTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleFunctionsTrait.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleHelperTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleHelperTrait.php',
+        'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleHookTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleHookTrait.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleLicenseTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleLicenseTrait.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ModuleTrait' => __DIR__ . '/../..' . '/src/Traits/ModuleTrait.php',
         'Onlineshopmodule\\PrestaShop\\Module\\Vatnumber\\Traits\\ObjectAdminControllerTrait' => __DIR__ . '/../..' . '/src/Traits/ObjectAdminControllerTrait.php',
+        'VATNumberTaxManager' => __DIR__ . '/../..' . '/VATNumberTaxManager.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
