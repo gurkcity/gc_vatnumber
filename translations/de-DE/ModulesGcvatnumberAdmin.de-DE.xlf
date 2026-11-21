@@ -186,6 +186,10 @@
         <source>Enable this option to load JavaScript files with the "defer" attribute, improving page load performance.</source>
         <target>Aktivieren Sie diese Option, um JavaScript-Dateien mit dem Attribut „defer“ zu laden und so die Seitenladeleistung zu verbessern.</target>
       </trans-unit>
+      <trans-unit id="9fa70ad6139f2a83269df74eb6747816">
+        <source>Enables you to enter the intra-community VAT number when creating the address. You must fill in the company field to allow entering the VAT number.</source>
+        <target>Ermöglicht Ihnen, die innergemeinschaftliche Umsatzsteuer-Identifikationsnummer beim Anlegen der Adresse einzugeben. Sie müssen das Feld Firma ausfüllen, damit die USt-IdNr. eingegeben werden kann.</target>
+      </trans-unit>
       <trans-unit id="0a52730597fb4ffa01fc117d9e71e3a9">
         <source>Example</source>
         <target>Beispiel</target>
@@ -222,6 +226,14 @@
         <source>Files</source>
         <target>Dateien</target>
       </trans-unit>
+      <trans-unit id="5ed551f933a4d0a3965f195ba72df798">
+        <source>GC European</source>
+        <target>GC Europäische</target>
+      </trans-unit>
+      <trans-unit id="af278b58d1188a3f4c3681e810c53489">
+        <source>GC European VAT number</source>
+        <target>GC Europäische USt-IdNr.</target>
+      </trans-unit>
       <trans-unit id="ec833c896da4a7349e562bd742fcb606">
         <source>GC Vatnumber</source>
         <target>GC Vatnumber</target>
@@ -241,6 +253,10 @@
       <trans-unit id="6a26f548831e6a8c26bfbbd9f6ec61e0">
         <source>Help</source>
         <target>Hilfe</target>
+      </trans-unit>
+      <trans-unit id="23a25176e6c32e29f35f1a13ac41f60c">
+        <source>Home country</source>
+        <target>Heimatland</target>
       </trans-unit>
       <trans-unit id="97302e3d521f43eea39a3f151a75aafd">
         <source>Hook Name</source>
@@ -546,6 +562,14 @@
         <source>Scope</source>
         <target>Scope</target>
       </trans-unit>
+      <trans-unit id="8ece920b36ee0e3582e75517eb67a4b7">
+        <source>Select EU-Countries</source>
+        <target>EU-Länder auswählen</target>
+      </trans-unit>
+      <trans-unit id="5684c3ad0fe1361315535912a3c27005">
+        <source>Select a country here that corresponds to you home country</source>
+        <target>Wählen Sie hier das Land aus, das Ihrem Heimatland entspricht.</target>
+      </trans-unit>
       <trans-unit id="f4f70727dc34561dfde1a3c529b6205c">
         <source>Settings</source>
         <target>Einstellungen</target>
@@ -729,6 +753,10 @@
       <trans-unit id="b89ad4c4a68763f3497deedf2f3dbf68">
         <source>Upload custom payment logo. The logo will appear on the checkout page</source>
         <target>Laden Sie Ihr individuelles Zahlungslogo hoch. Das Logo wird auf der Checkout-Seite angezeigt.</target>
+      </trans-unit>
+      <trans-unit id="7cb32e708d6b961d476baced73d362bb">
+        <source>VAT number</source>
+        <target>USt-IdNr.</target>
       </trans-unit>
       <trans-unit id="689202409e48743b914713f96d93947c">
         <source>Value</source>
